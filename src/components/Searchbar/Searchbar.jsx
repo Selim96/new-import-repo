@@ -1,38 +1,30 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import s from './Searchbar.module.css';
 import { toast } from 'react-toastify';
 import PropTypes from "prop-types";
 import { FiSearch } from "@react-icons/all-files/fi/FiSearch";
 
-class Searchbar extends Component {
-    state = {
-        toSearch: '',
+function Searchbar({onSubmit}) {
+    const [toSearch, setToSearch] = useState('');
+
+    const handlChange = (e) => {
+        setToSearch(e.currentTarget.value.toLowerCase());
     }
 
-    static propTypes = {
-        onSubmit: PropTypes.func,
-    }
-
-    handlChange = (e) => {
-        this.setState({ toSearch: e.currentTarget.value.toLowerCase(), });
-    }
-
-    handlSubmit = (e) => {
+    const handlSubmit = (e) => {
         e.preventDefault();
-        const searchQuery = this.state.toSearch;
         
-        if (searchQuery.trim() === '') {
+        if (toSearch.trim() === '') {
             toast.error('please, enter name!!!!');
             return;
         }
-        this.props.onSubmit(searchQuery);
-        this.setState({ toSearch: '' });
+        onSubmit(toSearch);
+        setToSearch('');
     }
 
-    render() {
-        return (
+    return (
             <header className={s.Searchbar}>
-                <form className={s.SearchForm} onSubmit={this.handlSubmit}>
+                <form className={s.SearchForm} onSubmit={handlSubmit}>
                     <button type="submit" className={s.SearchFormButton}>
                         <FiSearch size={20}/>
                         <span className={s.SearchFormButtonLabel}>Search</span>
@@ -44,13 +36,66 @@ class Searchbar extends Component {
                         autoComplete="off"
                         autoFocus
                         placeholder="Search images and photos"
-                        value={this.state.toSearch}
-                        onChange={this.handlChange}
+                        value={toSearch}
+                        onChange={handlChange}
                     />
                 </form>
             </header>
         );
-    }
 }
+
+Searchbar.propTypes = {
+        onSubmit: PropTypes.func,
+    }
+
+// ===============================================
+// class Searchbar extends Component {
+//     state = {
+//         toSearch: '',
+//     }
+
+//     static propTypes = {
+//         onSubmit: PropTypes.func,
+//     }
+
+//     handlChange = (e) => {
+//         this.setState({ toSearch: e.currentTarget.value.toLowerCase(), });
+//     }
+
+//     handlSubmit = (e) => {
+//         e.preventDefault();
+//         const searchQuery = this.state.toSearch;
+        
+//         if (searchQuery.trim() === '') {
+//             toast.error('please, enter name!!!!');
+//             return;
+//         }
+//         this.props.onSubmit(searchQuery);
+//         this.setState({ toSearch: '' });
+//     }
+
+//     render() {
+//         return (
+//             <header className={s.Searchbar}>
+//                 <form className={s.SearchForm} onSubmit={this.handlSubmit}>
+//                     <button type="submit" className={s.SearchFormButton}>
+//                         <FiSearch size={20}/>
+//                         <span className={s.SearchFormButtonLabel}>Search</span>
+//                     </button>
+//                     <input
+//                         className={s.SearchFormInput}
+//                         type="text"
+//                         name="input"
+//                         autoComplete="off"
+//                         autoFocus
+//                         placeholder="Search images and photos"
+//                         value={this.state.toSearch}
+//                         onChange={this.handlChange}
+//                     />
+//                 </form>
+//             </header>
+//         );
+//     }
+// }
 
 export default Searchbar;
