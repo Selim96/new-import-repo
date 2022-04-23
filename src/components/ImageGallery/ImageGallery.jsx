@@ -21,9 +21,7 @@ const Status = {
 function ImageGallery({imageName}) {
     const [images, setImages] = useState([]);
     const [totalHits, setTotalHits] = useState('');
-    const [per_page, setPer_page] = useState(12);
     const [status, setStatus] = useState(Status.IDLE);
-    const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [imageURL, setImageURL] = useState('');
     const [loaderOn, setLoaderOn] = useState(false);
@@ -38,26 +36,21 @@ function ImageGallery({imageName}) {
         setStatus(Status.PENDING);
     
         api.page = 1;
-        api.per_page = per_page;
-        api.fetchImages().
-            then(respObj => {
+        api.fetchImages().then(respObj => {
                 if (respObj.hits.length === 0) {
                     return Promise.reject(new Error(`We can't find ${imageName}!`));
                 }
                 setStatus(Status.RESOLWED);
                 setImages(respObj.hits);
                 setTotalHits(respObj.totalHits);
-            }).
-            catch(error => {
+            }).catch(error => {
                 errorFunc(error);
-                setError(error);
                 setStatus(Status.REJECTED);
             });
     }, [imageName]);
 
     const onLoadMore = () => {
         setLoaderOn(true);
-        
         api.pageIncrise();
         api.fetchImages().then(respObj => {
             setImages(prev => [...prev, ...respObj.hits]);
