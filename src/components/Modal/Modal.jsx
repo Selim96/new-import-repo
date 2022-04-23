@@ -8,11 +8,10 @@ const modalRoot = document.querySelector('#modalRoot');
 function Modal({ children, onClose }) {
     useEffect(() => {
         window.addEventListener('keydown', closeOnEscape);
-        
         return () => {
             window.removeEventListener('keydown', closeOnEscape);
         } 
-}, []);
+},);
     
     function closeOnEscape(e) {
         if (e.code === 'Escape') {
