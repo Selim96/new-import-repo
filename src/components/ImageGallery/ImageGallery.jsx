@@ -36,7 +36,6 @@ function ImageGallery({imageName}) {
         }
         console.log('RUN UPDATE!!!!!!')
         setStatus(Status.PENDING);
-        setLoaderOn(true);
     
         api.page = 1;
         api.per_page = per_page;
@@ -46,7 +45,6 @@ function ImageGallery({imageName}) {
                     return Promise.reject(new Error(`We can't find ${imageName}!`));
                 }
                 setStatus(Status.RESOLWED);
-                setLoaderOn(false);
                 setImages(respObj.hits);
                 setTotalHits(respObj.totalHits);
             }).
@@ -84,9 +82,9 @@ function ImageGallery({imageName}) {
             return <div></div>
         };
 
-        // if (status === Status.PENDING) {
-        //     return <Loader/>;
-        // };
+        if (status === Status.PENDING) {
+            return <Loader/>;
+        };
 
         if (status === Status.REJECTED) {
             return <ErrorPic />;
